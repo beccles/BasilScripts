@@ -1,4 +1,5 @@
 require 'csv'
+require 'tk'
 
 SYMBOL_ONE = 0
 SYMBOL_TWO = 1
@@ -56,15 +57,15 @@ def addToCondesnedList(condensedList, condensedListIndex, symbolList, symbolList
 	pairRemoved = true
 end
 
-def exportCSV(condensedList)
-	CSV.open("Symbols.csv", "w") do |csv|
+def exportCSV(condensedList, exportedFileName)
+	CSV.open(exportedFileName, "w") do |csv|
 		condensedList.each do |index, pair|
 			csv << pair.each {|symbol| symbol}
 		end
 	end
 end
 
-fileName = 'pairs info for beccac.csv'
+fileName = Tk.getOpenFile('defaultextension' => 'csv','filetypes' => "{{Comma Seperated Values} {.csv}} {{All Files} *}")
 
 symbolList = Hash.new(Array.new)
 processCSV(fileName,symbolList)
@@ -72,6 +73,8 @@ processCSV(fileName,symbolList)
 condensedList = Hash.new(Array.new)
 condensePairs(symbolList,condensedList)
 
-exportCSV(condensedList)
+exportedFileName = Tk::getSaveFile('defaultextension' => 'csv','filetypes' => "{{Comma Seperated Values} {.csv}}")
+
+exportCSV(condensedList, exportedFileName)
 
 
